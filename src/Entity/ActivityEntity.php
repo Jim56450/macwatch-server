@@ -18,7 +18,7 @@ class ActivityEntity
     private ?string $computerId = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $sessionId = null;
+    private ?string $sessionId = '';
 
     #[ORM\Column(length: 255)]
     private ?string $appName = '';
@@ -51,6 +51,18 @@ class ActivityEntity
     public function setComputerId(string $computerId = 'none'): static
     {
         $this->computerId = $computerId;
+
+        return $this;
+    }
+
+    public function getSessionId(): ?string
+    {
+        return $this->sessionId;
+    }
+
+    public function setSessionId(string $sessionId = ''): static
+    {
+        $this->sessionId = $sessionId;
 
         return $this;
     }
@@ -126,18 +138,6 @@ class ActivityEntity
     public function setIsBrowser(?bool $isBrowser = false): static
     {
         $this->isBrowser = $isBrowser;
-
-        return $this;
-    }
-
-    public function getSessionId(): ?string
-    {
-        return $this->sessionId;
-    }
-
-    public function setSessionId(string $sessionId): static
-    {
-        $this->sessionId = $sessionId;
 
         return $this;
     }
