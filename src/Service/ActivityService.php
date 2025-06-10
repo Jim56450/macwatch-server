@@ -14,7 +14,7 @@ readonly class ActivityService
     ) {
     }
 
-    private function truncateString(string $string = null,int $length,?string $ellipsis = '...'):?string
+    private function truncateString(?string $string = null,?int $length = 250,?string $ellipsis = '...'):?string
     {
         if (is_null($string)) {
             return null;
