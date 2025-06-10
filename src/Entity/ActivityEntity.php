@@ -18,6 +18,9 @@ class ActivityEntity
     private ?string $computerId = '';
 
     #[ORM\Column(length: 255)]
+    private ?string $sessionId = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $appName = '';
 
     #[ORM\Column(length: 255)]
@@ -34,9 +37,6 @@ class ActivityEntity
 
     #[ORM\Column]
     private ?bool $isBrowser = false;
-
-    #[ORM\Column(length: 255)]
-    private ?string $sessionId = null;
 
     public function getId(): ?int
     {
