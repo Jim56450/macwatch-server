@@ -50,6 +50,7 @@ readonly class ActivityService
             $activity->setStartTime(new \DateTimeImmutable($activityDto->start_time));
             $activity->setEndTime(new \DateTimeImmutable($activityDto->end_time));
             $activity->setIsBrowser($activityDto->is_browser);
+            $activity->setComputerId($activityDto->computer_id);
 
             // Persist each entity
             $this->entityManager->persist($activity);
