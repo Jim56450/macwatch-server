@@ -45,7 +45,7 @@ readonly class ActivityService
             $activity = new ActivityEntity();
             $activity->setAppName($activityDto->app_name);
             $activity->setComputerId($activityDto->computer_id);
-            $activity->setSessionId(substr($activityDto->session_id, 0, 255)); // truncate if too long
+            $activity->setSessionId(substr($activityDto->session_id??'', 0, 255)); // truncate if too long
             $activity->setWindowTitle(substr($activityDto->window_title, 0, 255)); // truncate if too long
 
             $activity->setUrl($this->truncateString($activityDto->url, 250));
