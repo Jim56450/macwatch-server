@@ -35,6 +35,9 @@ class ActivityEntity
     #[ORM\Column]
     private ?bool $isBrowser = false;
 
+    #[ORM\Column(length: 255)]
+    private ?string $sessionId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -123,6 +126,18 @@ class ActivityEntity
     public function setIsBrowser(?bool $isBrowser = false): static
     {
         $this->isBrowser = $isBrowser;
+
+        return $this;
+    }
+
+    public function getSessionId(): ?string
+    {
+        return $this->sessionId;
+    }
+
+    public function setSessionId(string $sessionId): static
+    {
+        $this->sessionId = $sessionId;
 
         return $this;
     }

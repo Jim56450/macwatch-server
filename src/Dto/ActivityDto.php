@@ -18,6 +18,10 @@ final readonly class ActivityDto
 
         #[Assert\NotBlank]
         #[Assert\Type('string')]
+        public string $session_id,
+
+        #[Assert\NotBlank]
+        #[Assert\Type('string')]
         public string $app_name,
 
         #[Assert\NotBlank]

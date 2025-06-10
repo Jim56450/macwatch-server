@@ -44,13 +44,14 @@ readonly class ActivityService
             $ids[] = $activityDto->id;
             $activity = new ActivityEntity();
             $activity->setAppName($activityDto->app_name);
+            $activity->setComputerId($activityDto->computer_id);
+            $activity->setSessionId(substr($activityDto->session_id, 0, 255)); // truncate if too long
             $activity->setWindowTitle(substr($activityDto->window_title, 0, 255)); // truncate if too long
 
             $activity->setUrl($this->truncateString($activityDto->url, 250));
             $activity->setStartTime(new \DateTimeImmutable($activityDto->start_time));
             $activity->setEndTime(new \DateTimeImmutable($activityDto->end_time));
             $activity->setIsBrowser($activityDto->is_browser);
-            $activity->setComputerId($activityDto->computer_id);
 
             // Persist each entity
             $this->entityManager->persist($activity);
