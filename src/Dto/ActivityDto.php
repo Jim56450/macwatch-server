@@ -16,7 +16,6 @@ final readonly class ActivityDto
         #[Assert\Type('string')]
         public string $computer_id,
 
-        #[Assert\NotBlank]
         #[Assert\Type('string', 'null')]
         public string $session_id = '',
 
