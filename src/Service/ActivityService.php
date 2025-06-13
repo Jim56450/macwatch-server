@@ -40,18 +40,34 @@ readonly class ActivityService
     public function saveActivities(array $activityCollection): array
     {
         $ids = [];
+        $activity = null;
         foreach ($activityCollection as $activityDto) {
             $ids[] = $activityDto->id;
-            $activity = new ActivityEntity();
-            $activity->setAppName($activityDto->app_name);
-            $activity->setComputerId($activityDto->computer_id);
-            $activity->setSessionId(substr($activityDto->session_id??'', 0, 255)); // truncate if too long
-            $activity->setWindowTitle(substr($activityDto->window_title, 0, 255)); // truncate if too long
 
-            $activity->setUrl($this->truncateString($activityDto->url, 250));
-            $activity->setStartTime(new \DateTimeImmutable($activityDto->start_time));
-            $activity->setEndTime(new \DateTimeImmutable($activityDto->end_time));
-            $activity->setIsBrowser($activityDto->is_browser);
+            $activity = $activity ?? $this->entityManager->getRepository(ActivityEntity::class)->findLast([
+                'computerId' => $activityDto->computer_id
+            ]);
+
+            if ((null !== $activity)
+                && ($activity->getSessionId() === $activityDto->session_id)
+                && ($activity->getAppName() === $activityDto->app_name)
+                && ($activity->getWindowTitle() === $activityDto->window_title)
+                && ($activity->getUrl() === $activityDto->url)
+                && ($activity->isBrowser() === $activityDto->is_browser)
+            ) {
+                $activity->setEndTime(new \DateTimeImmutable($activityDto->end_time));
+            } else {
+                $activity = new ActivityEntity();
+                $activity->setAppName($activityDto->app_name);
+                $activity->setComputerId($activityDto->computer_id);
+                $activity->setSessionId(substr($activityDto->session_id??'', 0, 255)); // truncate if too long
+                $activity->setWindowTitle(substr($activityDto->window_title, 0, 255)); // truncate if too long
+
+                $activity->setUrl($this->truncateString($activityDto->url, 250));
+                $activity->setStartTime(new \DateTimeImmutable($activityDto->start_time));
+                $activity->setEndTime(new \DateTimeImmutable($activityDto->end_time));
+                $activity->setIsBrowser($activityDto->is_browser);
+            }
 
             // Persist each entity
             $this->entityManager->persist($activity);

@@ -43,6 +43,18 @@ class ActivityEntity
         return $this->id;
     }
 
+    public function get($key) : string|int|null
+    {
+        return match ($key) {
+            'id' => $this->getId(),
+            'computerId' => $this->getComputerId(),
+            'sessionId' => $this->getSessionId(),
+            'appName' => $this->getAppName(),
+            'windowTitle' => $this->getWindowTitle(),
+            default => null,
+        };
+    }
+
     public function getComputerId(): ?string
     {
         return $this->computerId;

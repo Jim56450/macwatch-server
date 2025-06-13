@@ -24,7 +24,7 @@ final readonly class ActivityDto
         public string $app_name,
 
         #[Assert\NotBlank]
-        #[Assert\Type('string')]
+        #[Assert\Type('string', 'null')]
         public string $window_title,
 
         #[Assert\Type('string', 'null')]

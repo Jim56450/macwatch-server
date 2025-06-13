@@ -16,6 +16,28 @@ class ActivityEntityRepository extends ServiceEntityRepository
         parent::__construct($registry, ActivityEntity::class);
     }
 
+    public function findLast(array $criteria) : ?ActivityEntity
+    {
+        $activity =  $this->createQueryBuilder('a')
+            ->orderBy('a.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        if (null === $activity) {
+            return null;
+        }
+
+        foreach ($criteria as $key => $value) {
+            if ($activity->get($key) !== $value) {
+                return null;
+            }
+        }
+
+        return $activity;
+    }
+
     //    /**
     //     * @return ActivityEntity[] Returns an array of ActivityEntity objects
     //     */
