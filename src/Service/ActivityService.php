@@ -10,8 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 readonly class ActivityService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private DateTimeImmutableService $dateTimeImmutableService
+        private EntityManagerInterface $entityManager
     ) {
     }
 
@@ -56,7 +55,7 @@ readonly class ActivityService
                 && ($activity->getUrl() === $activityDto->url)
                 && ($activity->isBrowser() === $activityDto->is_browser)
             ) {
-                $activity->setEndTime($this->dateTimeImmutableService->new($activityDto->end_time));
+                $activity->setEndTime(new \DateTimeImmutable($activityDto->end_time));
             } else {
                 $activity = new ActivityEntity();
                 $activity->setAppName($activityDto->app_name);
@@ -65,8 +64,8 @@ readonly class ActivityService
                 $activity->setWindowTitle(substr($activityDto->window_title, 0, 255)); // truncate if too long
 
                 $activity->setUrl($this->truncateString($activityDto->url, 250));
-                $activity->setStartTime($this->dateTimeImmutableService->new($activityDto->start_time));
-                $activity->setEndTime($this->dateTimeImmutableService->new($activityDto->end_time));
+                $activity->setStartTime(new \DateTimeImmutable($activityDto->start_time));
+                $activity->setEndTime(new \DateTimeImmutable($activityDto->end_time));
                 $activity->setIsBrowser($activityDto->is_browser);
             }
 
