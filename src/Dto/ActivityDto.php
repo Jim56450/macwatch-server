@@ -31,12 +31,10 @@ final readonly class ActivityDto
         public ?string $url,
 
         #[Assert\NotBlank]
-        //#[Assert\DateTime(format: 'c')]  // ISO 8601
         #[FlexibleDateTimeConstraint]
         public string $start_time,
 
         #[Assert\NotBlank]
-        //#[Assert\DateTime(format: 'c')]  // ISO 8601
         #[FlexibleDateTimeConstraint]
         public string $end_time,
 
