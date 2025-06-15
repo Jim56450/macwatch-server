@@ -12,11 +12,12 @@ class DateTimeImmutableService
         $this->timeZone = new DateTimeZone('Europe/Paris');
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function new(string $dateTime): \DateTimeImmutable
+    public function get(string $dateTime): \DateTimeImmutable
      {
-         return new \DateTimeImmutable($dateTime, $this->timeZone);
+         try {
+             return new \DateTimeImmutable($dateTime, $this->timeZone);
+         } catch (\Exception $e) {
+             return new \DateTimeImmutable("now", $this->timeZone);
+         }
      }
 }

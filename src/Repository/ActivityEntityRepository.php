@@ -16,9 +16,11 @@ class ActivityEntityRepository extends ServiceEntityRepository
         parent::__construct($registry, ActivityEntity::class);
     }
 
-    public function findLast(array $criteria) : ?ActivityEntity
+    public function findLast(string $computerId = 'none', array $criteria = []) : ?ActivityEntity
     {
         $activity =  $this->createQueryBuilder('a')
+            ->andWhere('a.computerId = :computerId')
+            ->setParameter('computerId', $computerId)
             ->orderBy('a.id', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
