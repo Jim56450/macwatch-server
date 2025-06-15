@@ -34,7 +34,8 @@ class MacWatchDashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::section('Computer Activity');
-        yield MenuItem::linkToCrud('Activity', 'fa fa-tags', ActivityEntity::class);
+        yield MenuItem::linkToCrud('Activity', 'fa fa-tags', ActivityEntity::class)
+            ->setController(ActivityEntityCrudController::class);
         yield MenuItem::section('Computer Activity Tic');
         yield MenuItem::linkToCrud('Activity Tic', 'fa fa-tags', ActivityEntity::class)
                     ->setController(ActivityEntityTicTicCrudController::class);
