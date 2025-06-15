@@ -49,10 +49,10 @@ readonly class ActivityService
 
             if ((null !== $activity)
                 && ($activity->isBrowser() === $activityDto->is_browser)
-                && ($this->truncateString($activity->getSessionId()) === $activityDto->session_id)
-                && ($this->truncateString($activity->getAppName()) === $activityDto->app_name)
-                && ($this->truncateString($activity->getWindowTitle()) === $activityDto->window_title)
-                && ($this->truncateString($activity->getUrl()) === $activityDto->url)
+                && ($this->truncateString($activity->getSessionId()) === $this->truncateString($activityDto->session_id))
+                && ($this->truncateString($activity->getAppName()) === $this->truncateString($activityDto->app_name))
+                && ($this->truncateString($activity->getWindowTitle()) === $this->truncateString($activityDto->window_title))
+                && ($this->truncateString($activity->getUrl()) === $this->truncateString($activityDto->url))
             ) {
                 $activity->setEndTime($this->dateTimeImmutableService->get($activityDto->end_time));
             } else {
