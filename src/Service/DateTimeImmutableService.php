@@ -3,11 +3,13 @@
 namespace App\Service;
 
 
+use DateTimeZone;
+
 class DateTimeImmutableService
 {
-    private string $timeZone;
+    private DateTimeZone $timeZone;
     public function __construct() {
-        $this->timeZone = 'Europe/Paris';
+        $this->timeZone = new DateTimeZone('Europe/Paris');
     }
 
     /**
