@@ -50,21 +50,20 @@ readonly class ActivityService
             ]);
 
             if ((null !== $activity)
-                && ($activity->getSessionId() === $activityDto->session_id)
-                && ($activity->getAppName() === $activityDto->app_name)
-                && ($activity->getWindowTitle() === $activityDto->window_title)
-                && ($activity->getUrl() === $activityDto->url)
                 && ($activity->isBrowser() === $activityDto->is_browser)
+                && ($this->truncateString($activity->getSessionId()) === $activityDto->session_id)
+                && ($this->truncateString($activity->getAppName()) === $activityDto->app_name)
+                && ($this->truncateString($activity->getWindowTitle()) === $activityDto->window_title)
+                && ($this->truncateString($activity->getUrl()) === $activityDto->url)
             ) {
                 $activity->setEndTime($this->dateTimeImmutableService->new($activityDto->end_time));
             } else {
                 $activity = new ActivityEntity();
-                $activity->setAppName($activityDto->app_name);
                 $activity->setComputerId($activityDto->computer_id);
-                $activity->setSessionId(substr($activityDto->session_id??'', 0, 255)); // truncate if too long
-                $activity->setWindowTitle(substr($activityDto->window_title, 0, 255)); // truncate if too long
-
-                $activity->setUrl($this->truncateString($activityDto->url, 250));
+                $activity->setSessionId($this->truncateString($activityDto->session_id??'')); // truncate if too long
+                $activity->setAppName($this->truncateString($activityDto->app_name));
+                $activity->setWindowTitle($this->truncateString($activityDto->window_title)); // truncate if too long
+                $activity->setUrl($this->truncateString($activityDto->url));
                 $activity->setStartTime($this->dateTimeImmutableService->new($activityDto->start_time));
                 $activity->setEndTime($this->dateTimeImmutableService->new($activityDto->end_time));
                 $activity->setIsBrowser($activityDto->is_browser);
