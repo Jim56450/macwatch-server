@@ -39,7 +39,8 @@ class ActivityEntityJmdCrudController extends AbstractCrudController
     {
         $queryBuilder = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $queryBuilder->andWhere('entity.computerId = :computerId')
-            ->setParameter('computerId', 'MDR');
+            ->setParameter('computerId', 'MDR')
+            ->orderBy('entity.id', 'DESC');
 
 
         return $queryBuilder;
