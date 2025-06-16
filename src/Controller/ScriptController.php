@@ -41,7 +41,7 @@ unblock_domains() {
     domains="\$@"
     for domain in \$domains; do
         echo "Unblocking \$domain"
-        sed -i.bak "/^\\s*127\\.0\\.0\\.1\\s\+\$domain\\s*\$/d" /etc/hosts
+        sed -i.bak "/^[[:space:]]*127\\.0\\.0\\.1[[:space:]]\+\$domain[[:space:]]*\$/d" /etc/hosts
     done
 }
 
