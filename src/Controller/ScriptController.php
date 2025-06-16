@@ -20,7 +20,8 @@ class ScriptController
         // Dummy logic: Send script every 5 minutes
 
         return new JsonResponse([
-            'script' => 'echo "Hello from server B!" > ~/Desktop/hello.txt'
+            //'script' => 'echo "Hello from server B!" > ~/Desktop/hello.txt'
+             'script' => 'echo "I am user $(whoami)"'
         ]);
 
         // Otherwise, no script to send
