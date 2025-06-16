@@ -9,12 +9,17 @@ use Doctrine\ORM\EntityManagerInterface;
 
 readonly class ActivityService
 {
-    private bool $saveMDR;
+    private bool $saveExclusionList;
+    /**
+     * @var string[]
+     */
+    private array $exclusionList;
     public function __construct(
         private EntityManagerInterface $entityManager,
         private DateTimeImmutableService $dateTimeImmutableService
     ) {
-        $this->saveMDR = ($_ENV['SAVE_MDR'] ?? "false")==="true";
+        $this->saveExclusionList = ($_ENV['SAVE_EXCLUSION_LIST'] ?? "false")==="true";
+        $this->exclusionList = explode(',', $_ENV['EXCLUSION_LIST'] ?? "");
     }
 
     private function truncateString(?string $string = null,?int $length = 250,?string $ellipsis = '...'):?string
@@ -46,7 +51,7 @@ readonly class ActivityService
         $activity = null;
         foreach ($activityCollection as $activityDto) {
             $ids[] = $activityDto->id;
-            if (!$this->saveMDR && ($activityDto->computer_id === 'MDR')) {
+            if (!$this->saveExclusionList && ($this->exclusionList !== [] && in_array($activityDto->computer_id, $this->exclusionList, true))) {
                 continue;
             }
 
