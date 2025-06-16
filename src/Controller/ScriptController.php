@@ -2,14 +2,17 @@
 
 namespace App\Controller;
 
+use App\Service\ScriptService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 class ScriptController
 {
-    #[Route('/macwatch/script', name: 'get_script', methods: ['GET'])]
-    public function getScript(Request $request): JsonResponse
+    public function __construct(private ScriptService $scriptService) {}
+
+    #[Route('/macwatch/script/{computerId}', name: 'get_script', defaults: ['computerId' => null], methods: ['GET'])]
+    public function getScript(Request $request, ?string $computerId): JsonResponse
     {
         // Example: allow script only if a valid token is sent
         $token = $request->headers->get('X-API-TOKEN');
@@ -23,36 +26,9 @@ class ScriptController
 
         // Shell script with both block and unblock functions
 
-        $script = <<<EOT
-#!/bin/sh
-
-block_domains() {
-    domains="\$@"
-    for domain in \$domains; do
-        if ! grep -q "^127.0.0.1 \$domain\$" /etc/hosts; then
-            echo "Blocking \$domain"
-            echo "127.0.0.1 \$domain" | tee -a /etc/hosts > /dev/null
-        else
-            echo "\$domain is already blocked"
-        fi
-    done
-}
-
-unblock_domains() {
-    domains="\$@"
-    for domain in \$domains; do
-        echo "Unblocking \$domain"
-        sed -i.bak "/^127.0.0.1 \$domain\$/d" /etc/hosts
-    done
-}
-
-# Choose one of the following:
-#block_domains $domainList
-unblock_domains $domainList
-EOT;
+        $script = $this->scriptService->getScript($computerId);
 
         return new JsonResponse([
-            //'script' => 'echo "Hello from server B!" > ~/Desktop/hello.txt'
              'script' => $script
         ]);
 
