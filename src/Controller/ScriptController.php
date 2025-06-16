@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Service\ScriptService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
+#[AsController]
 class ScriptController
 {
-    public function __construct(private ScriptService $scriptService) {}
+    public function __construct(private readonly ScriptService $scriptService) {}
 
     #[Route('/macwatch/script/{computerId}', name: 'get_script', defaults: ['computerId' => null], methods: ['GET'])]
     public function getScript(Request $request, ?string $computerId): JsonResponse
