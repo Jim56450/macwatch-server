@@ -22,7 +22,11 @@ class MacWatchDashboardController extends AbstractDashboardController
     }
     public function index(): Response
     {
-        return $this->redirect($this->adminUrlGenerator->setController(ActivityEntityCrudController::class)->generateUrl());
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirect($this->adminUrlGenerator->setController(ActivityEntityCrudController::class)->generateUrl());
+        } else {
+            return $this->redirect($this->adminUrlGenerator->setController(ActivityEntityTicTicCrudController::class)->generateUrl());
+        }
     }
 
     public function configureDashboard(): Dashboard
