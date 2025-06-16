@@ -22,15 +22,16 @@ class ScriptController
         $domainList = implode(' ', $domains);
 
         // Shell script with both block and unblock functions
+
         $script = <<<EOT
 #!/bin/sh
 
 block_domains() {
     domains="\$@"
     for domain in \$domains; do
-        if ! grep -qE "^\\s*127\\.0\\.0\\.1\\s+\$domain(\\s|\$)" /etc/hosts; then
+        if ! grep -q "^127.0.0.1 \$domain\$" /etc/hosts; then
             echo "Blocking \$domain"
-            echo "127.0.0.1 \$domain" >> /etc/hosts
+            echo "127.0.0.1 \$domain" | tee -a /etc/hosts > /dev/null
         else
             echo "\$domain is already blocked"
         fi
@@ -41,14 +42,13 @@ unblock_domains() {
     domains="\$@"
     for domain in \$domains; do
         echo "Unblocking \$domain"
-        sed -i.bak "/^[[:space:]]*127\\.0\\.0\\.1[[:space:]]\+\$domain[[:space:]]*\$/d" /etc/hosts
+        sed -i.bak "/^127.0.0.1 \$domain\$/d" /etc/hosts
     done
 }
 
-# Call the desired function here
-#block_domains $domainList
-# To unblock instead, use:
-unblock_domains $domainList
+# Choose one of the following:
+block_domains $domainList
+#unblock_domains $domainList
 EOT;
 
         return new JsonResponse([
