@@ -10,20 +10,13 @@ use Doctrine\ORM\EntityManagerInterface;
 readonly class ActivityService
 {
     private bool $saveExclusionList;
-    /**
-     * @var string[]
-     */
-    private array $exclusionList;
 
-    /**
-     * @throws \JsonException
-     */
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private DateTimeImmutableService $dateTimeImmutableService
+        private DateTimeImmutableService $dateTimeImmutableService,
+        private array $exclusionList = []
     ) {
         $this->saveExclusionList = ($_ENV['SAVE_EXCLUSION_LIST'] ?? "false")==="true";
-        $this->exclusionList = json_decode($_ENV['EXCLUSION_LIST'] ?? [], true, 512, JSON_THROW_ON_ERROR);
     }
 
     private function truncateString(?string $string = null,?int $length = 250,?string $ellipsis = '...'):?string
