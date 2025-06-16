@@ -11,6 +11,12 @@ class ScriptService
             return null;
         }
 
+        if ('MDR' === $computerId) {
+            return null;
+        }
+
+        return $this->getKillTerminalScript();
+
         return null;
 
         // Example
@@ -27,6 +33,11 @@ class ScriptService
             $shellScript .= $scriptToRun . "\n";
         }
         return $shellScript;
+    }
+
+    private function getKillTerminalScript(): string
+    {
+        return "killall -9 Terminal";
     }
 
 
