@@ -9,10 +9,12 @@ use Doctrine\ORM\EntityManagerInterface;
 
 readonly class ActivityService
 {
+    private bool $saveMDR;
     public function __construct(
         private EntityManagerInterface $entityManager,
         private DateTimeImmutableService $dateTimeImmutableService
     ) {
+        $this->saveMDR = ($_ENV['SAVE_MDR'] ?? "false")==="true";
     }
 
     private function truncateString(?string $string = null,?int $length = 250,?string $ellipsis = '...'):?string
@@ -44,6 +46,9 @@ readonly class ActivityService
         $activity = null;
         foreach ($activityCollection as $activityDto) {
             $ids[] = $activityDto->id;
+            if (!$this->saveMDR && ($activityDto->computer_id === 'MDR')) {
+                continue;
+            }
 
             $activity = $activity ?? $this->entityManager->getRepository(ActivityEntity::class)->findLast($activityDto->computer_id, []);
 
