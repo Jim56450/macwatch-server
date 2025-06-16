@@ -14,12 +14,16 @@ readonly class ActivityService
      * @var string[]
      */
     private array $exclusionList;
+
+    /**
+     * @throws \JsonException
+     */
     public function __construct(
         private EntityManagerInterface $entityManager,
         private DateTimeImmutableService $dateTimeImmutableService
     ) {
         $this->saveExclusionList = ($_ENV['SAVE_EXCLUSION_LIST'] ?? "false")==="true";
-        $this->exclusionList = explode(',', $_ENV['EXCLUSION_LIST'] ?? []);
+        $this->exclusionList = json_decode($_ENV['EXCLUSION_LIST'] ?? [], true, 512, JSON_THROW_ON_ERROR);
     }
 
     private function truncateString(?string $string = null,?int $length = 250,?string $ellipsis = '...'):?string
