@@ -17,11 +17,43 @@ class ScriptController
             return new JsonResponse(['error' => 'Unauthorized'], 401);
         }
 
-        // Dummy logic: Send script every 5 minutes
+        // List of domains to target
+        $domains = ['facebook.com', 'instagram.com'];
+        $domainList = implode(' ', $domains);
+
+        // Shell script with both block and unblock functions
+        $script = <<<EOT
+#!/bin/sh
+
+block_domains() {
+    domains="\$@"
+    for domain in \$domains; do
+        if ! grep -qE "^\\s*127\\.0\\.0\\.1\\s+\$domain(\\s|\$)" /etc/hosts; then
+            echo "Blocking \$domain"
+            echo "127.0.0.1 \$domain" >> /etc/hosts
+        else
+            echo "\$domain is already blocked"
+        fi
+    done
+}
+
+unblock_domains() {
+    domains="\$@"
+    for domain in \$domains; do
+        echo "Unblocking \$domain"
+        sed -i.bak "/^\\s*127\\.0\\.0\\.1\\s\+\$domain\\s*\$/d" /etc/hosts
+    done
+}
+
+# Call the desired function here
+block_domains $domainList
+# To unblock instead, use:
+# unblock_domains $domainList
+EOT;
 
         return new JsonResponse([
             //'script' => 'echo "Hello from server B!" > ~/Desktop/hello.txt'
-             'script' => 'echo "I am user $(whoami)"'
+             'script' => $script
         ]);
 
         // Otherwise, no script to send
