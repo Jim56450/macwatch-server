@@ -47,8 +47,8 @@ unblock_domains() {
 }
 
 # Choose one of the following:
-block_domains $domainList
-#unblock_domains $domainList
+#block_domains $domainList
+unblock_domains $domainList
 EOT;
 
         return new JsonResponse([
