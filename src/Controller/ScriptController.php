@@ -46,9 +46,9 @@ unblock_domains() {
 }
 
 # Call the desired function here
-block_domains $domainList
+#block_domains $domainList
 # To unblock instead, use:
-# unblock_domains $domainList
+unblock_domains $domainList
 EOT;
 
         return new JsonResponse([
