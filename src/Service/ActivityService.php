@@ -19,7 +19,7 @@ readonly class ActivityService
         private DateTimeImmutableService $dateTimeImmutableService
     ) {
         $this->saveExclusionList = ($_ENV['SAVE_EXCLUSION_LIST'] ?? "false")==="true";
-        $this->exclusionList = explode(',', $_ENV['EXCLUSION_LIST'] ?? "");
+        $this->exclusionList = explode(',', $_ENV['EXCLUSION_LIST'] ?? []);
     }
 
     private function truncateString(?string $string = null,?int $length = 250,?string $ellipsis = '...'):?string
